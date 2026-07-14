@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jafy Food</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff5e6;
+            color: #222;
+        }
+
+        header {
+            background: #e63946;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 42px;
+        }
+
+        .aviso {
+            background: #fff3cd;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .productos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .producto {
+            width: 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px #bbb;
+            text-align: center;
+        }
+
+        .producto .emoji {
+            font-size: 75px;
+        }
+
+        .producto h2 {
+            margin-bottom: 8px;
+        }
+
+        .precio {
+            font-size: 24px;
+            color: #e63946;
+            font-weight: bold;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .agregar {
+            background: #e63946;
+            color: white;
+        }
+
+        .carrito {
+            max-width: 700px;
+            margin: 20px auto 50px;
+            padding: 25px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px #bbb;
+        }
+
+        #listaCarrito {
+            line-height: 1.8;
+            font-size: 18px;
+        }
+
+        #botonPagar {
+            width: 100%;
+            background: #2a9d8f;
+            color: white;
+            margin-top: 15px;
+        }
+
+        #fondoPago {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        #ventanaPago {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 360px;
+            max-width: 80%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            z-index: 2;
+        }
+
+        #ventanaPago input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 7px 0;
+            font-size: 16px;
+        }
+
+        .pagar {
+            width: 100%;
+            background: #2a9d8f;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .cerrar {
+            width: 100%;
+            background: #777;
+            color: white;
+            margin-top: 8px;
+        }
+
+        #resultado {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🍔 Jafy Food 🍕</h1>
+    <p>La comida más rica</p>
+</header>
+
+<div class="aviso">
+    ⚠️ Página de práctica: no escribas números reales de tarjetas.
+</div>
+
+<section class="productos">
+
+    <div class="producto">
+        <div class="emoji">🍔</div>
+        <h2>Hamburguesa</h2>
+        <p>Carne, queso, tomate y lechuga.</p>
+        <div class="precio">$5.000</div>
+        <button class="agregar" onclick="agregarProducto('Hamburguesa', 5000)">
+            Agregar al carrito
+        </button>
+    </div>
+
+    <div class="producto">
+        <div class="emoji">🍕</div>
+        <h2>Pizza</h2>
+        <p>Pizza grande de muzzarella.</p>
+        <div class="precio">$8.000</div>
+        <button class="agregar" onclick="agregarProducto('Pizza', 8000)">
+            Agregar al carrito
+        </button>
+    </div>
+
+    <div class="producto">
+        <div class="emoji">🍟</div>
+        <h2>Papas fritas</h2>
+        <p>Porción grande de papas.</p>
+        <div class="precio">$3.000</div>
+        <button class="agregar" onclick="agregarProducto('Papas fritas', 3000)">
+            Agregar al carrito
+        </button>
+    </div>
+
+    <div class="producto">
+        <div class="emoji">🥤</div>
+        <h2>Gaseosa</h2>
+        <p>Vaso grande bien frío.</p>
+        <div class="precio">$2.000</div>
+        <button class="agregar" onclick="agregarProducto('Gaseosa', 2000)">
+            Agregar al carrito
+        </button>
+    </div>
+
+</section>
+
+<section class="carrito">
+    <h2>🛒 Mi carrito</h2>
+
+    <div id="listaCarrito">
+        Todavía no agregaste productos.
+    </div>
+
+    <h2 id="total">Total: $0</h2>
+
+    <button id="botonPagar" onclick="abrirPago()">
+        💳 Ir al pago de prueba
+    </button>
+</section>
+
+<div id="fondoPago" onclick="cerrarPago()"></div>
+
+<div id="ventanaPago">
+    <h2>💳 Pago de prueba</h2>
+
+    <p>
+        Usá datos inventados. No escribas una tarjeta verdadera.
+    </p>
+
+    <input id="nombre" type="text" placeholder="Nombre de prueba">
+
+    <input
+        id="tarjeta"
+        type="text"
+        placeholder="Tarjeta de prueba: 1111 2222 3333 4444"
+    >
+
+    <input id="vencimiento" type="text" placeholder="Vencimiento: 12/30">
+
+    <input id="codigo" type="text" placeholder="Código: 123">
+
+    <button class="pagar" onclick="pagarPedido()">
+        Confirmar pago gratis
+    </button>
+
+    <button class="cerrar" onclick="cerrarPago()">
+        Cancelar
+    </button>
+
+    <div id="resultado"></div>
+</div>
+
+<script>
+    let carrito = [];
+    let total = 0;
+
+    function agregarProducto(nombre, precio) {
+        carrito.push({
+            nombre: nombre,
+            precio: precio
+        });
+
+        total = total + precio;
+        actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+        const lista = document.getElementById("listaCarrito");
+
+        lista.innerHTML = "";
+
+        carrito.forEach(function(producto) {
+            lista.innerHTML +=
+                "🍽️ " +
+                producto.nombre +
+                " — $" +
+                producto.precio.toLocaleString("es-AR") +
+                "<br>";
+        });
+
+        document.getElementById("total").innerHTML =
+            "Total: $" + total.toLocaleString("es-AR");
+    }
+
+    function abrirPago() {
+        if (carrito.length === 0) {
+            alert("Primero agregá comida al carrito.");
+            return;
+        }
+
+        document.getElementById("fondoPago").style.display = "block";
+        document.getElementById("ventanaPago").style.display = "block";
+    }
+
+    function cerrarPago() {
+        document.getElementById("fondoPago").style.display = "none";
+        document.getElementById("ventanaPago").style.display = "none";
+        document.getElementById("resultado").innerHTML = "";
+    }
+
+    function pagarPedido() {
+        const nombre = document.getElementById("nombre").value;
+        const tarjeta = document.getElementById("tarjeta").value;
+
+        if (nombre === "" || tarjeta === "") {
+            document.getElementById("resultado").innerHTML =
+                "❌ Completá los datos de prueba.";
+            return;
+        }
+
+        document.getElementById("resultado").innerHTML =
+            "✅ ¡Pago de prueba aprobado!<br>" +
+            "🍔 Tu pedido está siendo preparado.";
+
+        carrito = [];
+        total = 0;
+
+        document.getElementById("listaCarrito").innerHTML =
+            "Todavía no agregaste productos.";
+
+        document.getElementById("total").innerHTML =
+            "Total: $0";
+    }
+</script>
+
+</body>
+</html>
